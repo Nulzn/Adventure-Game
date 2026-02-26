@@ -1,7 +1,7 @@
 #include <iostream>
 
 class INarrator {
-
+    
     public:
     virtual ~INarrator() = default;
     virtual std::string describeRoom(const GameState& state) const = 0;
