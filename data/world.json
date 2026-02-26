@@ -1,0 +1,91 @@
+{
+    "startRoom": "Kitchen",
+  
+    "rooms": [
+      {
+        "id": "Garden",
+        "description": "You are standing in a quiet garden. The sky flickers unnaturally.",
+        "exits": {
+          "south": "Hall",
+          "east": "Kitchen"
+        }
+      },
+  
+      {
+        "id": "Hall",
+        "description": "A narrow hallway with distorted paintings.",
+        "exits": {
+          "north": "Garden",
+          "south": "Livingroom"
+        }
+      },
+  
+      {
+        "id": "Livingroom",
+        "description": "A familiar living room. Something feels off.",
+        "exits": {
+          "north": "Hall",
+          "west": "Kitchen"
+        }
+      },
+  
+      {
+        "id": "Kitchen",
+        "description": "The sun shines in. Outlet is glitching.",
+        "exits": {
+          "north": "Bedroom",
+          "south": "Garage",
+          "east": "Office",
+          "west": "Garden"
+        }
+      },
+  
+      {
+        "id": "Office",
+        "description": "Dark office, only green codes on the screens.",
+        "exits": {
+          "north": "Bathroom",
+          "south": "WarRoom",
+          "west": "Kitchen"
+        }
+      },
+  
+      {
+        "id": "Bathroom",
+        "description": "The mirror glitches, the bathtub is old.",
+        "exits": {
+          "south": "Office"
+        }
+      },
+  
+      {
+        "id": "Bedroom",
+        "description": "The base. Where the magic happens, the bedroom.",
+        "exits": {
+          "south": "Kitchen"
+        }
+      },
+  
+      {
+        "id": "Garage",
+        "description": "Smells like.. old oil, but no car. Must be an empty garage.",
+        "exits": {
+          "north": "Kitchen"
+        }
+      },
+  
+      {
+        "id": "WarRoom",
+        "description": "The unknown.. looks like a war room, what is it doing here?",
+        "locked": true,
+        "keys": {
+            "key1": "Access Keycard",
+            "key2": "Old Metal Fragment",
+            "key3": "Identity Chip"
+        },
+        "exits": {
+          "north": "Office"
+        }
+      }
+    ]
+  }
