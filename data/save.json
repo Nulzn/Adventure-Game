@@ -1,0 +1,11 @@
+{
+    "currentRoom": "Kitchen",
+    "inventory": [
+        
+    ],
+    "rooms": {
+        "Garden": {
+            "locked": false
+        }
+    }
+}
