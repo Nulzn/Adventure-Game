@@ -1,5 +1,9 @@
 #include <iostream>
 #include <string>
+//la till gamestate osv.
+#include "GameState.h"
+#include "Action.h"
+#include "ActionResult.h"
 
 class INarrator {
     
