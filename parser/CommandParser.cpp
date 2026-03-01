@@ -1,4 +1,5 @@
 #include "CommandParser.h"
+#include <boost/algorithm/string/case_conv.hpp>
 #include <sstream>
 
 Action CommandParser::parse(const std::string& input)const {
@@ -8,15 +9,15 @@ Action CommandParser::parse(const std::string& input)const {
 
     iss >> word1 >> word2;
 
-    if (word1 == "look" && word2.empty()){
+    if (boost::algorithm::to_lower(word1) == "look" && word2.empty()){
         return {ActionType::INSPECT, ""};
     }
 
-    if (word1 == "go" && !word2.empty()){
+    if (boost::algorithm::to_lower(word1) == "go" && !word2.empty()){
         return {ActionType::GO, word2};
     }
 
-    if (word1 == "quit" && word2.empty()){
+    if (boost::algorithm::to_lower(word1) == "quit" && word2.empty()){
         return {ActionType::QUIT, ""};
     }
 
