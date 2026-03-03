@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "GameState.h"
+#include "engine/GameState.h"
 
 class WorldLoader
 {

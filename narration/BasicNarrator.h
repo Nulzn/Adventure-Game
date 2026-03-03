@@ -1,7 +1,7 @@
 #pragma once 
 #include "INarrator.h"
-#include "GameState.h"
-#include "ActionResult.h"
+#include "engine/GameState.h"
+#include "parser/ActionResult.h"
 
 
 
@@ -15,5 +15,5 @@ public:
         const ActionResult& result
     ) const override;
 
-    std::string helpText() const override;
+    std::string helpText(ActionResult& result) const;
 }; 

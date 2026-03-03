@@ -1,0 +1,1 @@
+clang++ main.cpp engine/*.cpp narration/*.cpp parser/*.cpp world/*.cpp -I. -std=c++17 -o adventure

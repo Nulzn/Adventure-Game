@@ -1,7 +1,12 @@
+#pragma once
+
+#include "GameState.h"
+#include "parser/ActionResult.h"
+#include "parser/Action.h"
 
 class GameEngine{
     private:
     GameState state;
     public:
-    ActionResult processaction(const Action& action, const GameState& state);
+    ActionResult process_action(const Action& action, GameState& state);
 };

@@ -1,9 +1,9 @@
-#include <iostream>
+#pragma once
 #include <string>
 //la till gamestate osv.
-#include "GameState.h"
-#include "Action.h"
-#include "ActionResult.h"
+#include "engine/GameState.h"
+#include "parser/Action.h"
+#include "parser/ActionResult.h"
 
 class INarrator {
     

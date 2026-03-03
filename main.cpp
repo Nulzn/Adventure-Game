@@ -1,12 +1,13 @@
 #include<iostream>
-#include<GameEngine.h>
-#include<GameState.h>
-#include<WorldLoader.h>
-#include<CommandParser.h>
-#include<BasicNarrator.h>
+#include<engine/GameEngine.h>
+#include<engine/GameState.h>
+#include<world/WorldLoader.h>
+#include<parser/CommandParser.h>
+#include<narration/BasicNarrator.h>
 
 int main() {
-    GameState state = WorldLoader::load("world.json");
+    WorldLoader loader;
+    GameState state = loader.load("data/world.json");
 
     std::cout << state.rooms[state.currentRoom].description << std::endl;
 

@@ -1,98 +1,92 @@
 #include "GameEngine.h"
-#include "ActionResult.h"
-#include "Action.h"
 #include "GameState.h"
-//#include "d"
+#include "parser/ActionResult.h"
+#include "parser/Action.h"
+//#include "[folderPath]/[fileName].(cpp, hpp, json, h)"
+//#include "EXAMPLE: world/SaveSystem.h or world/SaveSystem.cpp"
 #include <fstream>
 #include <string>
 #include <algorithm>
         //GO, TAKE, DROP, USE_ON, USE, QUIT, INSPECT
 
-ActionResult GameEngine::process_action(const Action& action, GameState& state) {// ska det verkligen vara const
+ActionResult GameEngine::process_action(const Action& action, GameState& state) {
     ActionResult result;
     result.success = false;
-    //för att hitta nuvarande rum vi är i
+    
     Room& currentRoom = state.rooms[state.currentRoom];
     
-    
-    switch(action.type){
-        case ActionType::GO: //la till en check ifall rummet är låst eller inte innan spelare går.
-        if (currentRoom.exits.count(action.target)){ //north south east west 
-            std::string nextRoomId = state.currentRoom.exits[action.target];
-            Room& nextRoom = state.rooms[state.nextRoomId];
-            if (nextRoom.locked){
-                result.success = false;
-                result.message = "The door to the " + nextRoom.name + " is locked. You will need a key to unlock it!";
-                break;
-            } else{
-
-                state.currentRoom.id = state.currentRoom.exits[action.target];
-                result.success = true;
-                result.message = "You walked to the" + state.rooms[state.currentRoomId].name + ".";
+    switch(action.type) {
+        case ActionType::GO: {
+            if (currentRoom.exits.count(action.target)) {
+                std::string nextRoomId = currentRoom.exits[action.target];
+                Room& nextRoom = state.rooms[nextRoomId];
+                if (nextRoom.locked) {
+                    result.message = "The door to the " + nextRoom.name + " is locked. You will need a key to unlock it!";
+                } else {
+                    state.currentRoom = nextRoomId;
+                    result.success = true;
+                    result.message = "You walked to the" + nextRoomId;
+                }
+            } else {
+                result.message = "You are not allowed to walk there.";
             }
-        } else {
-            result.success = false;
-            result.message = "You are not allowed to walk there.";
+            break;
         }
-        
-        break;
-        case  ActionType::TAKE:{
 
-                auto it = std::find(currentRoom.itemIds.begin(), currentRoom.itemIds.end(), action.target);
-            if (it != currentRoom.itemIds.end()){
-                if (state.inventory.size() >= 6){
-                    result.success = false;
-                    result.message = "Your inventory is full."
+        case ActionType::TAKE: {
+            auto it = std::find(currentRoom.itemIds.begin(), currentRoom.itemIds.end(), action.target);
+            if (it != currentRoom.itemIds.end()) {
+                if (state.inventory.size() >= 6) {
+                    result.message = "Your inventory is full.";
                 } else {
                     state.inventory.push_back(action.target);
                     currentRoom.itemIds.erase(it);
                     result.success = true;
-                    result.message = "You picked up " + action.target + ".";
+                    result.message = "You picked up " + action.target;
                 }
-            }   else {
-                result.success = false;
+            } else {
                 result.message = "The item you seek is not in the room.";
+            }
+            break;
         }
-        break;
 
-        }
-        case ActionType::DROP:{
-                auto it = std::find(state.inventory.begin(),state.inventory.end(),action.target);
-            if (it != state.inventory.end()){
+        case ActionType::DROP: {
+            auto it = std::find(state.inventory.begin(), state.inventory.end(), action.target);
+            if (it != state.inventory.end()) {
                 currentRoom.itemIds.push_back(action.target);
                 state.inventory.erase(it);
                 result.success = true;
-                result.message = "You dropped " + action.target + " in " +state.rooms[state.currentRoomId].name + ".";
+                result.message = "You dropped " + action.target + " in " + currentRoom.name + ".";
             } else {
-                result.success = false;
                 result.message = "You do not have " + action.target + " in your inventory.";
             }
-        break;
+            break;
+        }
 
-            }
-        case ActionType::USE:{
-            auto it = std::find(state.inventory.begin(),state.inventory.end(),action.target);
-            if (it != state.inventory.end()){
-                ...
+        case ActionType::USE: {
+            auto it = std::find(state.inventory.begin(), state.inventory.end(), action.target);
+            if (it != state.inventory.end()) {
+                // Logic here
             } else {
                 result.success = false;
                 result.message = "You do not have " + action.target + " in your inventory.";
             }
-        break;
-        
-        case ActionType::USE_ON:{
-            auto it = std::find(state.inventory.begin(),state.inventory.end(),action.target);
-            if (it == state.inventory.end()){
+            break;
+        } 
+
+        case ActionType::USE_ON: {
+            auto it = std::find(state.inventory.begin(), state.inventory.end(), action.target);
+            if (it == state.inventory.end()) {
                 result.success = false;
-                result.message = "You do not have that item. ";
+                result.message = "You do not have that item.";
                 break;
             }
             
             bool foundTarget = false;
             for (auto const& [direction, roomId] : currentRoom.exits) {
-                Room& targetRoom = state.rooms[roomId]; //loopar igenom alla dörrarna nära dig
-                if (targetRoom.locked && action.secondtarget == "door"){ // kollar ifall du vill låsa upp.
-                    if (targetRoom.requiredKeys.count(action.target)){ //låser upp
+                Room& targetRoom = state.rooms[roomId];
+                if (targetRoom.locked && action.secondtarget == "door") {
+                    if (targetRoom.requiredKeys.count(action.target)) {
                         targetRoom.locked = false;
                         result.success = true;
                         result.message = "You open the door to " + targetRoom.name + " you can now enter.";
@@ -100,12 +94,18 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
                         break;
                     }
                 }
-        } if (!foundTarget) {
-            result.success = false;
-            result.message = "That item does not fit the door. ";
-        }
-        break;
-        } //take key 
-    
-    }
-}
+            } 
+            if (!foundTarget) {
+                result.success = false;
+                result.message = "That item does not fit the door.";
+            }
+            break;
+        } 
+
+        default:
+            result.message = "Action not recognized homeboy.";
+            break;
+    } // This MUST close the switch
+
+    return result; 
+} // This MUST be the final bracket in the file
