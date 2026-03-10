@@ -15,6 +15,6 @@ class INarrator {
     const Action& action,
     const ActionResult& result
     ) const = 0;
-    virtual std::string helpText() const = 0;
+    virtual std::string helpText(ActionResult& result) const = 0;
 };
 

@@ -4,7 +4,6 @@
 #include "parser/Action.h"
 #include <sstream>
 
-
 std::string BasicNarrator::describeCurrentRoom(const GameState& state) const {
     const auto& room = state.rooms.at(state.currentRoom);
 
@@ -26,16 +25,31 @@ std::string BasicNarrator::describeActionResult(
     if (!result.success){
         return result.message;
     }
-    if (action.type == ActionType::QUIT){
-        return "Goodbye!";
+
+    switch (action.type) {
+        case ActionType::QUIT:
+            return "Goodbye!";
+        case ActionType::GO:
+            return describeCurrentRoom(state);
+        
+        default:
+            return result.message;
     }
-    if (action.type == ActionType::GO){
-        return describeCurrentRoom(state);
-    }
-    return "";
 };
 
 std::string BasicNarrator::helpText(ActionResult& result) const {
-    result.message = "HELP IS ON THE WAY!";
+    result.message =  "Commands:\n"
+            "  look              - search for items in current room\n"
+            "  go <direction>    - move (north/south/east/west)\n"
+            "  take <item>       - pick up an item\n"
+            "  drop <item>       - drop an item\n"
+            "  inspect <item>    - examine an item\n"
+            "  use <item>        - use an item\n"
+            "  use <item> on <target> - use item on something\n"
+            "  inventory         - show your inventory\n"
+            "  save <filename>   - save the game\n"
+            "  load <filename>   - load a saved game\n"
+            "  quit              - quit the game\n";
+
     return result.message;   
 }

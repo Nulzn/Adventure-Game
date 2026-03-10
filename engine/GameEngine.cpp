@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "parser/ActionResult.h"
 #include "parser/Action.h"
+#include "items/item.h"
 //#include "[folderPath]/[fileName].(cpp, hpp, json, h)"
 //#include "EXAMPLE: world/SaveSystem.h or world/SaveSystem.cpp"
 #include <fstream>
@@ -34,15 +35,16 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
         }
 
         case ActionType::TAKE: {
-            auto it = std::find(currentRoom.itemIds.begin(), currentRoom.itemIds.end(), action.target);
-            if (it != currentRoom.itemIds.end()) {
+            auto it = currentRoom.items.find(action.target);
+            if (it != currentRoom.items.end()) {
                 if (state.inventory.size() >= 6) {
                     result.message = "Your inventory is full.";
                 } else {
-                    state.inventory.push_back(action.target);
-                    currentRoom.itemIds.erase(it);
+                    std::shared_ptr<Item> item_to_take = it->second;
+                    state.inventory.push_back(item_to_take);
+                    currentRoom.items.erase(it);
                     result.success = true;
-                    result.message = "You picked up " + action.target;
+                    result.message = "You picked up " + item_to_take->displayName + ".";
                 }
             } else {
                 result.message = "The item you seek is not in the room.";
@@ -51,12 +53,16 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
         }
 
         case ActionType::DROP: {
-            auto it = std::find(state.inventory.begin(), state.inventory.end(), action.target);
+            auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
+                    return item->commandName == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
+            });
+            
             if (it != state.inventory.end()) {
-                currentRoom.itemIds.push_back(action.target);
+                std::shared_ptr<Item> item_to_drop = *it;
+                currentRoom.items[item_to_drop->commandName] = item_to_drop;
                 state.inventory.erase(it);
                 result.success = true;
-                result.message = "You dropped " + action.target + " in " + currentRoom.name + ".";
+                result.message = "You dropped " + item_to_drop->displayName + " in " + currentRoom.name + ".";
             } else {
                 result.message = "You do not have " + action.target + " in your inventory.";
             }
@@ -64,7 +70,9 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
         }
 
         case ActionType::USE: {
-            auto it = std::find(state.inventory.begin(), state.inventory.end(), action.target);
+            auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
+                    return item->commandName == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
+            });
             if (it != state.inventory.end()) {
                 // Logic here
             } else {
@@ -75,7 +83,9 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
         } 
 
         case ActionType::USE_ON: {
-            auto it = std::find(state.inventory.begin(), state.inventory.end(), action.target);
+            auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
+                    return item->commandName == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
+            });
             if (it == state.inventory.end()) {
                 result.success = false;
                 result.message = "You do not have that item.";
@@ -101,6 +111,39 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
             }
             break;
         } 
+        case ActionType::LOOK: {
+            result.success = true;
+            std::string msg = "";
+            if (!currentRoom.items.empty()){
+                msg += "You see the follow items in the room: \n";
+                for (const auto& [id, item] : currentRoom.items){
+                    msg += "\n - " + item->displayName;
+                }
+            } else {
+                msg += "There are no items in this room.";
+            }
+            result.message = msg;
+            break;
+        }
+        case ActionType::INVENTORY: {
+            result.success = true;
+            std::string msg = "";
+            if (state.inventory.size() != 0){
+                msg += "This is in your inventory: \n";
+                for(const auto& item_ptr : state.inventory){
+                    msg += "\n - " + item_ptr->displayName;
+                }
+
+            } else {
+                msg += "Your inventory is empty. ";
+
+            }
+            result.message = msg;
+            break;
+        }
+        case ActionType::INSPECT: {
+            
+        }
 
         default:
             result.message = "Action not recognized homeboy.";

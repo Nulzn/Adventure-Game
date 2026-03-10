@@ -15,5 +15,5 @@ public:
         const ActionResult& result
     ) const override;
 
-    std::string helpText(ActionResult& result) const;
+    std::string helpText(ActionResult& result) const override;
 }; 

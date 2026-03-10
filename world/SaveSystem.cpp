@@ -7,10 +7,14 @@ using json = nlohmann::json;
 
 void save(const GameState& state, const std::string& filename) {
     json j;
+    nlohmann::json inventoryJson = nlohmann::json::array();
 
     j["currentRoom"] = state.currentRoom;
 
-    j["inventory"] = state.inventory;
+    for (const auto& item : state.inventory) {
+        inventoryJson.push_back(item->id);
+    };
+    j["inventory"] = inventoryJson;
 
     for (const auto& [roomId, room] : state.rooms) {
         j["rooms"][roomId]["locked"] = room.locked;

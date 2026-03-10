@@ -3,14 +3,14 @@
 #include <algorithm>
 #include <cctype>
 
-Action CommandParser::parse(const std::string& input)const {
+Action CommandParser::parse(const std::string& input) const {
     //Dela upp input i tokens och gör allt till lowercase
     std::istringstream iss(input);
     std::vector<std::string> tokens;
     std::string word;
 
     while (iss >> word) {
-        std::transform(word.begin(), word.end(), word.begin(), [](unsigned char c){return islower(c);});
+        std::transform(word.begin(), word.end(), word.begin(), [](unsigned char c){return tolower(c);});
         tokens.push_back(word);
     }
 
@@ -24,7 +24,9 @@ Action CommandParser::parse(const std::string& input)const {
 
     //1-token command
     if (count == 1){
-
+        if (cmd == "look") return {ActionType::LOOK, "", ""};
+        if (cmd == "inventory") return {ActionType::INVENTORY, "", ""};
+        
         //Command som kräver argument
         if (cmd == "go")    return {ActionType::INVALID, "", ""};
     }
