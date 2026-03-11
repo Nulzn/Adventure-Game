@@ -7,7 +7,7 @@
 //#include "EXAMPLE: world/SaveSystem.h or world/SaveSystem.cpp"
 #include <fstream>
 #include <string>
-#include <algorithm>
+//#include <algorithm>
         //GO, TAKE, DROP, USE_ON, USE, QUIT, INSPECT
 
 ActionResult GameEngine::process_action(const Action& action, GameState& state) {
@@ -54,12 +54,12 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
 
         case ActionType::DROP: {
             auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
-                    return item->commandName == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
+                    return item->id == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
             });
             
             if (it != state.inventory.end()) {
                 std::shared_ptr<Item> item_to_drop = *it;
-                currentRoom.items[item_to_drop->commandName] = item_to_drop;
+                currentRoom.items[item_to_drop->id] = item_to_drop;
                 state.inventory.erase(it);
                 result.success = true;
                 result.message = "You dropped " + item_to_drop->displayName + " in " + currentRoom.name + ".";
@@ -84,30 +84,44 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
 
         case ActionType::USE_ON: {
             auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
-                    return item->commandName == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
+                    return item->id == action.target; 
             });
             if (it == state.inventory.end()) {
                 result.success = false;
                 result.message = "You do not have that item.";
                 break;
             }
-            
+            std::shared_ptr<Item> item_to_use = *it;
             bool foundTarget = false;
+            bool unlockedtarget = false;
+
             for (auto const& [direction, roomId] : currentRoom.exits) {
                 Room& targetRoom = state.rooms[roomId];
                 if (targetRoom.locked && action.secondtarget == "door") {
-                    if (targetRoom.requiredKeys.count(action.target)) {
-                        targetRoom.locked = false;
-                        result.success = true;
-                        result.message = "You open the door to " + targetRoom.name + " you can now enter.";
-                        foundTarget = true;
+                    foundTarget = true;
+
+                    auto key_item = std::dynamic_pointer_cast<KeyItem>(item_to_use);
+                    if (!key_item){
+                        result.message = "You can not use the " + item_to_use->displayName + " as the key boy.";
                         break;
                     }
-                }
+                    for (auto const& [jsonkey, required_key_id] : targetRoom.requiredKeys){
+                        if (required_key_id == item_to_use->id){
+                            targetRoom.locked = false;
+                            result.success = true;
+                            result.message = "You unlocked the door to the " + targetRoom.name + " you are welcome to walk in now boy.";
+                            unlockedtarget = true;
+                            break;
+                        }
+                    }
+                } if (unlockedtarget) break;
             } 
             if (!foundTarget) {
                 result.success = false;
-                result.message = "That item does not fit the door.";
+                result.message = "There is no locked door here boy.";
+            } else if (!unlockedtarget){
+                result.success = false;
+                result.message = "It does not fit the door boy";
             }
             break;
         } 
@@ -142,11 +156,104 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
             break;
         }
         case ActionType::INSPECT: {
+            auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
+                return item->id == action.target;
+            });
+            if (it != state.inventory.end()){
+                std::shared_ptr<Item> item_to_inspect = *it;
+                result.success = true;
+                result.message = item_to_inspect->onInspect();
+            } else {
+                result.message = "You do not see that item. ";
+            }
+            break;
+
             
         }
+        case ActionType::QUIT: {
+            result.success = true;
+            result.message = "Bye bye home boy! D:";
+            break;
 
+        }
+        case ActionType::HELP:{
+            result.success = true;
+            result.message = "Commands: \n"
+            "  look              - search for items in current room\n"
+            "  go <direction>    - move (north/south/east/west)\n"
+            "  take <item>       - pick up an item\n"
+            "  drop <item>       - drop an item\n"
+            "  inspect <item>    - examine an item\n"
+            "  use <item>        - use an item\n"
+            "  use <item> on <target> - use item on something\n"
+            "  inventory         - show your inventory\n"
+            "  save <filename>   - save the game\n"
+            "  load <filename>   - load a saved game\n"
+            "  quit              - quit the game\n";
+            break;
+        }
+        case ActionType::OPEN: {
+            auto it = currentRoom.items.find(action.target);
+            if (it != currentRoom.items.end()){
+                std::shared_ptr<Item> item_to_open = it->second;
+                auto container = std::dynamic_pointer_cast<ContainerItem>(item_to_open);
+                if (container && container->locked){
+                    if(action.secondtarget == container->code){
+                        container->locked = false;
+                        std::string foundItems = "";
+                        for (auto& [id, item] : container->contents){
+                            currentRoom.items[id] = item;
+                            foundItems += "\n - " + item->displayName;
+                        }
+                        container->contents.clear();
+                        result.success = true;
+                        result.message = "You successfully open the " +item_to_open->displayName + " .\nInside you find: " + foundItems;
+
+                    } else {
+                        result.message = "Nice try homeboy. Wrong code.\n";
+
+                    }
+                } else {
+                    result.message = item_to_open->displayName + " is already open!\n";
+
+                }
+                
+            } else{
+                result.message = action.target + " does not exist in this room. \n";
+            }
+            break;
+        }
+        case ActionType::CONSUME: {
+            auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
+                return item->id == action.target;
+            });
+            if (it != state.inventory.end()){
+                std::shared_ptr<Item> item_to_eat = *it;
+                auto consumable = std::dynamic_pointer_cast<ConsumableItem>(item_to_eat);
+                if (consumable){
+                    if (consumable->id == "redpill"){
+                        state.hasWon = true;
+                        result.success = true;
+                        result.message = "You have eaten the red pill... welcome to the outside world, now you finally see the TRUTH!!!";
+                    }
+                    else if (consumable->id == "bluepill"){
+                        state.hasWon = true;
+                        result.success = true;
+                        result.message = "You wake up at a retirement home old as fuck. But extreamly happy about your FAKE life. Bye!";
+                    }
+                    else {
+                        result.success = true;
+                        result.message = "Nom nom nom, fat boy.\n";
+                    }
+                    state.inventory.erase(it);
+                } else {
+                    result.message = "Can not eat that fat boy.";
+                }
+            }
+            break;
+        }
         default:
-            result.message = "Action not recognized homeboy.";
+            result.message = "Action not recognized homeboy.\n";
             break;
     } // This MUST close the switch
 

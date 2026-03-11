@@ -1,0 +1,80 @@
+==== GAME LOG ====
+
+Step:      1
+Input:     go east
+Parsed:    YES
+Success:   YES
+Message:   You walked to thelivingroom
+--------
+Step:      2
+Input:     go north
+Parsed:    YES
+Success:   YES
+Message:   You walked to thehall
+--------
+Step:      3
+Input:     take keycard
+Parsed:    YES
+Success:   YES
+Message:   You picked up Access Keycard.
+--------
+Step:      4
+Input:     go south
+Parsed:    YES
+Success:   YES
+Message:   You walked to thelivingroom
+--------
+Step:      5
+Input:     go west
+Parsed:    YES
+Success:   YES
+Message:   You walked to thekitchen
+--------
+Step:      6
+Input:     go south
+Parsed:    YES
+Success:   YES
+Message:   You walked to thebedroom
+--------
+Step:      7
+Input:     use keycard on door
+Parsed:    YES
+Success:   YES
+Message:   You unlocked the door to the War Room you are welcome to walk in now boy.
+--------
+Step:      8
+Input:     go east
+Parsed:    YES
+Success:   YES
+Message:   You walked to thewarroom
+--------
+Step:      9
+Input:     open chest 1234
+Parsed:    YES
+Success:   YES
+Message:   You successfully open the Chest .
+Inside you find: 
+ - Bluepill
+ - Redpill
+--------
+Step:      10
+Input:     take bluepill
+Parsed:    YES
+Success:   YES
+Message:   You picked up Bluepill.
+--------
+Step:      11
+Input:     inventory
+Parsed:    YES
+Success:   YES
+Message:   This is in your inventory: 
+
+ - Access Keycard
+ - Bluepill
+--------
+Step:      12
+Input:     consume bluepill
+Parsed:    YES
+Success:   YES
+Message:   You wake up at a retirement home old as fuck. But extreamly happy about your FAKE life. Bye!
+--------

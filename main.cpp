@@ -1,10 +1,13 @@
 #include<iostream>
 #include<string>
-#include<engine/GameEngine.h>
-#include<engine/GameState.h>
-#include<world/WorldLoader.h>
-#include<parser/CommandParser.h>
-#include<narration/BasicNarrator.h>
+
+#include "engine/GameEngine.h"
+#include "engine/GameState.h"
+#include "world/WorldLoader.h"
+#include "parser/CommandParser.h"
+#include "narration/BasicNarrator.h"
+#include "narration/logger.h"
+#include "world/SaveSystem.h"
 
 int main() {
     WorldLoader loader;
@@ -12,8 +15,18 @@ int main() {
     BasicNarrator narrator;
     GameEngine engine;
 
+    Logger logger("data/game_log.txt");
 
-    GameState state = loader.load("data/world.json");
+
+    GameState state;
+    /*if (SaveSystem::saveExists("data/save.json")) {
+        state = loader.load("data/world.json");
+        SaveSystem::loadSave(state, "data/save.json");
+    } else {
+        state = loader.load("data/world.json");
+    }*/
+
+   state = loader.load("data/world.json");
 
     bool gameRunning = true;
     std::string userInput;
@@ -31,18 +44,24 @@ int main() {
         // den här baracken i flera veckor.
 
         Action action = parser.parse(userInput); // Gets the action message
+        ActionResult result = engine.process_action(action, state);
+        logger.log(userInput, action, result);
 
         if (action.type == ActionType::QUIT) {
+            std::string narration = narrator.describeActionResult(state, action, result);
+            std::cout << narration << std::endl;
+            SaveSystem::saveGame(state, "data/save.json");
+            logger.log(userInput, action, {false, "Player Quit"});
             break;
         }
-
-        ActionResult result = engine.process_action(action, state);
+        if (action.type == ActionType::HELP){
+            std::cout << narrator.helpText(result) << std::endl;
+            logger.log(userInput, action, {false, "Help displayed"});
+            continue;
+        }
 
         std::string narration = narrator.describeActionResult(state, action, result);
-
         std::cout << narration << std::endl;
-        
-        //std::cout << narrator.describeActionResult(state, result, processedAction) << std::endl;
     }
 
     return 0;

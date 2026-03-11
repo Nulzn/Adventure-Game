@@ -26,9 +26,19 @@ Action CommandParser::parse(const std::string& input) const {
     if (count == 1){
         if (cmd == "look") return {ActionType::LOOK, "", ""};
         if (cmd == "inventory") return {ActionType::INVENTORY, "", ""};
+        if (cmd == "quit") return {ActionType::QUIT, "", ""};
+        if (cmd == "help") return {ActionType::HELP, "", ""};
+        if (cmd == "save") return {ActionType::SAVE, "", ""};
+        if (cmd == "load") return {ActionType::LOAD, "", ""};
         
-        //Command som kräver argument
+        //Command som kräver argument (säkerhet)
         if (cmd == "go")    return {ActionType::INVALID, "", ""};
+        if (cmd == "take") return {ActionType::INVALID, "", ""};
+        if (cmd == "drop") return {ActionType::INVALID, "", ""};
+        if (cmd == "inspect") return {ActionType::INVALID, "", ""};
+        if (cmd == "consume") return {ActionType::INVALID, "", ""};
+        if (cmd == "open") return {ActionType::INVALID, "", ""};
+        if (cmd == "use") return {ActionType::INVALID, "", ""};
     }
 
     //2-token command
@@ -38,6 +48,11 @@ Action CommandParser::parse(const std::string& input) const {
         if (cmd == "drop")  return {ActionType::DROP, tokens[1], ""};
         if (cmd == "inspect") return {ActionType::INSPECT, tokens[1], ""};
         if (cmd == "use")   return {ActionType::USE, tokens[1], ""};
+        if (cmd == "consume") return {ActionType::CONSUME, tokens[1], ""};
+    }
+    //3-token command
+    if (count == 3){
+        if (cmd == "open") return {ActionType::OPEN, tokens[1], tokens[2]};
     }
 
     //4-token command

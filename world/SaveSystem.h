@@ -1,9 +1,12 @@
 #pragma once
+
 #include <string>
 #include "engine/GameState.h"
 
-class SaveSystem
-{
+
+class SaveSystem {
 public:
-    static void save(const GameState& state, const std::string& filename);
+    static void saveGame(GameState& state, const std::string& fileName);
+    static bool saveExists(const std::string& fileName);
+    static void loadSave(GameState& state, const std::string& fileName);
 };

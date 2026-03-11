@@ -6,7 +6,22 @@
       "id": "garden",
       "displayName": "Garden",
       "description": "You are standing in a quiet garden. The sky flickers unnaturally.",
-      "items": [],
+      "items": [
+        {
+          "id": "hoe",
+          "displayName": "Hoe",
+          "commandName": "hoe",
+          "description": "A tool used for cutting grass...",
+          "type": "Item"
+        },
+        {
+          "id": "shovel",
+          "displayName": "Shovel",
+          "commandName": "shovel",
+          "description": "Something for digging dirt..",
+          "type": "Item"
+        }
+      ],
       "exits": {
         "south": "kitchen",
         "east": "hall"
@@ -17,7 +32,23 @@
       "id": "hall",
       "displayName": "Hall",
       "description": "A narrow hallway with distorted paintings.",
-      "items": [],
+      "items": [
+        {
+          "id": "keycard",
+          "displayName": "Access Keycard",
+          "commandName": "keycard",
+          "description": "A key for something...",
+          "type": "KeyItem",
+          "unlocksRoomId": "warroom"
+        },
+        {
+          "id": "long_ass_sword",
+          "displayName": "Long Ass Sword",
+          "commandName": "sword",
+          "description": "Long Ass Sword. MASSIVE.",
+          "type": "Item"
+        }
+      ],
       "exits": {
         "west": "garden",
         "south": "livingroom"
@@ -34,7 +65,7 @@
           "displayName": "Mango",
           "commandName": "mango",
           "description": "A ripe mango",
-          "type": "ReadableItem",
+          "type": "ConsumableItem",
           "text": "It looks delicious."
         },
         {
@@ -42,7 +73,7 @@
           "displayName": "Banana",
           "commandName": "banana",
           "description": "A ripe banana",
-          "type": "ReadableItem",
+          "type": "ConsumableItem",
           "text": "It looks rotten."
         }
       ],
@@ -58,28 +89,11 @@
       "description": "The sun shines in. Outlet is glitching.",
       "items": [
         {
-          "id": "access_keycard",
-          "displayName": "Access Keycard",
-          "commandName": "keycard",
-          "description": "A key for something...",
-          "type": "KeyItem",
-          "unlocksRoomId": "warroom"
-        },
-        {
           "id": "old_metal_fragment",
           "displayName": "Old Metal Fragment",
           "commandName": "fragment",
           "description": "Old rusty tool",
-          "type": "KeyItem",
-          "unlocksRoomId": "warrom"
-        },
-        {
-          "id": "identity_chip",
-          "displayName": "Identity Chip",
-          "commandName": "chip",
-          "description": "Something from a robot",
-          "type": "KeyItem",
-          "unlocksRoomId": "warroom"
+          "type": "Item"
         }
       ],
       "exits": {
@@ -94,7 +108,24 @@
       "id": "office",
       "displayName": "Office",
       "description": "Dark office, only green codes on the screens.",
-      "items": [],
+      "items": [
+        {
+          "id": "identity_chip",
+          "displayName": "Identity Chip",
+          "commandName": "chip",
+          "description": "Something from a robot",
+          "type": "ReadableItem",
+          "text": "IDENTETY CHIP - ACCESS GUARD"
+        },
+        {
+          "id": "macbook",
+          "displayName": "Macbook",
+          "commandName": "macbook",
+          "description": "SPECS: (2025), Touch-ID, 13.1-inch display, good for programming.",
+          "type": "ReadableItem",
+          "text": "Message from 'Anyomous Helper': I have to take a shit, dont you?"
+        }
+      ],
       "exits": {
         "north": "garage",
         "south": "bathroom",
@@ -106,7 +137,25 @@
       "id": "bathroom",
       "displayName": "Bathroom",
       "description": "The mirror glitches, the bathtub is old.",
-      "items": [],
+      "items": [
+        {
+          "id": "toothpaste",
+          "displayName": "Toothpaste",
+          "commandName": "toothpaste",
+          "description": "Something for cleaning.. YOUR TEETH homeboy",
+          "text": "Ethanol 40%. Red 40 20%. Glycerine 40%",
+          "type": "ReadableItem"
+        },
+        {
+          "id": "note",
+          "displayName": "Note",
+          "commandName": "note",
+          "description": "Old note, that seems to have something important on it...",
+          "text": "1234",
+          "type": "ReadableItem"
+
+        }
+      ],
       "exits": {
         "north": "office"
       }
@@ -116,7 +165,15 @@
       "id": "bedroom",
       "displayName": "Bedroom",
       "description": "The base. Where the magic happens, the bedroom.",
-      "items": [],
+      "items": [
+        {
+          "id": "phone",
+          "displayName": "Iphone 17 Pro Max 1TB 120Hz",
+          "commandName": "phone",
+          "description": "Take a picture with it homeboy.",
+          "type": "Item"
+        }
+      ],
       "exits": {
         "north": "kitchen",
         "east": "warroom"
@@ -127,7 +184,15 @@
       "id": "garage",
       "displayName": "Garage",
       "description": "Smells like.. old oil, but no car. Must be an empty garage.",
-      "items": [],
+      "items": [
+        {
+          "id": "oil",
+          "displayName": "Oil",
+          "commandName": "oil",
+          "description": "Smells like.. freedom. Just don't tell the United States about it..",
+          "type": "Item"
+        }
+      ],
       "exits": {
         "south": "office"
       }
@@ -137,10 +202,42 @@
       "id": "warroom",
       "displayName": "War Room",
       "description": "The unknown.. looks like a war room, what is it doing here?",
-      "items": [],
+      "items": [
+        {
+          "id": "chest",
+          "displayName": "Chest",
+          "commandName": "chest",
+          "description": "Old rust chest, that seems interesting...",
+          "type": "ContainerItem",
+          "locked": true,
+          "code": "1234",
+          "items": [
+            {
+              "id": "redpill",
+              "displayName": "Redpill",
+              "commandName": "redpill",
+              "description": "XXXX",
+              "type": "ConsumableItem",
+              "consumed": false,
+              "effect": "win"
+            },
+            {
+              "id": "bluepill",
+              "displayName": "Bluepill",
+              "commandName": "bluepill",
+              "description": "XXXX",
+              "type": "ConsumableItem",
+              "consumed": false,
+              "effect": "win"
+
+            }
+          ]
+        }
+
+      ],
       "locked": true,
       "keys": {
-          "key1": "Access Keycard"
+          "key1": "keycard"
       },
       "exits": {
         "west": "bedroom"

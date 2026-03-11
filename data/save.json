@@ -1,11 +1,164 @@
 {
-    "currentRoom": "Kitchen",
+    "currentRoom": "warroom",
     "inventory": [
-        
+        {
+            "commandName": "keycard",
+            "description": "A key for something...",
+            "displayName": "Access Keycard",
+            "id": "keycard",
+            "type": "KeyItem",
+            "unlocksRoomId": "warroom"
+        }
     ],
-    "rooms": {
-        "Garden": {
+    "rooms": [
+        {
+            "id": "bathroom",
+            "items": [
+                {
+                    "commandName": "note",
+                    "description": "Old note, that seems to have something important on it...",
+                    "displayName": "Note",
+                    "id": "note",
+                    "text": "1234",
+                    "type": "ReadableItem"
+                },
+                {
+                    "commandName": "toothpaste",
+                    "description": "Something for cleaning.. YOUR TEETH homeboy",
+                    "displayName": "Toothpaste",
+                    "id": "toothpaste",
+                    "text": "Ethanol 40%. Red 40 20%. Glycerine 40%",
+                    "type": "ReadableItem"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "bedroom",
+            "items": [
+                {
+                    "commandName": "phone",
+                    "description": "Take a picture with it homeboy.",
+                    "displayName": "Iphone 17 Pro Max 1TB 120Hz",
+                    "id": "phone",
+                    "type": "Item"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "garage",
+            "items": [
+                {
+                    "commandName": "oil",
+                    "description": "Smells like.. freedom. Just don't tell the United States about it..",
+                    "displayName": "Oil",
+                    "id": "oil",
+                    "type": "Item"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "garden",
+            "items": [
+                {
+                    "commandName": "hoe",
+                    "description": "A tool used for cutting grass...",
+                    "displayName": "Hoe",
+                    "id": "hoe",
+                    "type": "Item"
+                },
+                {
+                    "commandName": "shovel",
+                    "description": "Something for digging dirt..",
+                    "displayName": "Shovel",
+                    "id": "shovel",
+                    "type": "Item"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "hall",
+            "items": [
+                {
+                    "commandName": "sword",
+                    "description": "Long Ass Sword. MASSIVE.",
+                    "displayName": "Long Ass Sword",
+                    "id": "long_ass_sword",
+                    "type": "Item"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "kitchen",
+            "items": [
+                {
+                    "commandName": "fragment",
+                    "description": "Old rusty tool",
+                    "displayName": "Old Metal Fragment",
+                    "id": "old_metal_fragment",
+                    "type": "Item"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "livingroom",
+            "items": [
+                {
+                    "commandName": "banana",
+                    "description": "A ripe banana",
+                    "displayName": "Banana",
+                    "id": "banana",
+                    "type": "ConsumableItem"
+                },
+                {
+                    "commandName": "mango",
+                    "description": "A ripe mango",
+                    "displayName": "Mango",
+                    "id": "mango",
+                    "type": "ConsumableItem"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "office",
+            "items": [
+                {
+                    "commandName": "chip",
+                    "description": "Something from a robot",
+                    "displayName": "Identity Chip",
+                    "id": "identity_chip",
+                    "text": "IDENTETY CHIP - ACCESS GUARD",
+                    "type": "ReadableItem"
+                },
+                {
+                    "commandName": "macbook",
+                    "description": "SPECS: (2025), Touch-ID, 13.1-inch display, good for programming.",
+                    "displayName": "Macbook",
+                    "id": "macbook",
+                    "text": "Message from 'Anyomous Helper': I have to take a shit, dont you?",
+                    "type": "ReadableItem"
+                }
+            ],
+            "locked": false
+        },
+        {
+            "id": "warroom",
+            "items": [
+                {
+                    "commandName": "chest",
+                    "description": "Old rust chest, that seems interesting...",
+                    "displayName": "Chest",
+                    "id": "chest",
+                    "type": "ContainerItem"
+                }
+            ],
             "locked": false
         }
-    }
+    ]
 }

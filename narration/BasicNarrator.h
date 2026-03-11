@@ -1,8 +1,8 @@
-#pragma once 
+#pragma once
+
 #include "INarrator.h"
 #include "engine/GameState.h"
 #include "parser/ActionResult.h"
-
 
 
 class BasicNarrator : public INarrator {
@@ -16,4 +16,4 @@ public:
     ) const override;
 
     std::string helpText(ActionResult& result) const override;
-}; 
+};
