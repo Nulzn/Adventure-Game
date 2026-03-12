@@ -11,4 +11,5 @@ private:
     static Room parseRoom(const nlohmann::json& roomJson);
     static std::shared_ptr<Item> parseItem(const nlohmann::json& itemJson);
     static void validate(const GameState& state);
+    static void parseInventory(GameState& state, const nlohmann::json& inventoryJson);
 };

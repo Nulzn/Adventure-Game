@@ -3,12 +3,10 @@
 #include "parser/ActionResult.h"
 #include "parser/Action.h"
 #include "items/item.h"
-//#include "[folderPath]/[fileName].(cpp, hpp, json, h)"
-//#include "EXAMPLE: world/SaveSystem.h or world/SaveSystem.cpp"
 #include <fstream>
 #include <string>
-//#include <algorithm>
-        //GO, TAKE, DROP, USE_ON, USE, QUIT, INSPECT
+#include <iostream>
+
 
 ActionResult GameEngine::process_action(const Action& action, GameState& state) {
     ActionResult result;
@@ -38,7 +36,7 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
             auto it = currentRoom.items.find(action.target);
             if (it != currentRoom.items.end()) {
                 if (state.inventory.size() >= 6) {
-                    result.message = "Your inventory is full.";
+                    result.message = "Your pockets are completely stuffed, fat boy. You need to drop something before you can carry that.";
                 } else {
                     std::shared_ptr<Item> item_to_take = it->second;
                     state.inventory.push_back(item_to_take);
@@ -69,18 +67,18 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
             break;
         }
 
-        case ActionType::USE: {
+        /*case ActionType::USE: {
             auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
-                    return item->commandName == action.target; //Den här lilla funktionen retunerar små bokstäver som vi sedan kan jämföra (förhoppningsvis)
+                    return item->commandName == action.target;
             });
             if (it != state.inventory.end()) {
-                // Logic here
+                ... MASSIVE CODE BLOCK ... BOOM
             } else {
                 result.success = false;
                 result.message = "You do not have " + action.target + " in your inventory.";
             }
             break;
-        } 
+        } */
 
         case ActionType::USE_ON: {
             auto it = std::find_if(state.inventory.begin(), state.inventory.end(), [&](const std::shared_ptr<Item>& item){
@@ -170,13 +168,13 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
 
             
         }
-        case ActionType::QUIT: {
+        /*case ActionType::QUIT: {
             result.success = true;
-            result.message = "Bye bye home boy! D:";
             break;
 
         }
         case ActionType::HELP:{
+            std::cout<<"test\n\n";
             result.success = true;
             result.message = "Commands: \n"
             "  look              - search for items in current room\n"
@@ -184,14 +182,15 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
             "  take <item>       - pick up an item\n"
             "  drop <item>       - drop an item\n"
             "  inspect <item>    - examine an item\n"
-            "  use <item>        - use an item\n"
             "  use <item> on <target> - use item on something\n"
             "  inventory         - show your inventory\n"
             "  save <filename>   - save the game\n"
-            "  load <filename>   - load a saved game\n"
-            "  quit              - quit the game\n";
+            //"  load <filename>   - load a saved game\n"
+            "  quit              - quit the game\n"
+            "  open <container> <code> - open a container with a code\n"
+            "  consume <item>    - consume a consumable\n";
             break;
-        }
+        }*/
         case ActionType::OPEN: {
             auto it = currentRoom.items.find(action.target);
             if (it != currentRoom.items.end()){
@@ -251,11 +250,15 @@ ActionResult GameEngine::process_action(const Action& action, GameState& state) 
                 }
             }
             break;
+            /*case ActionType::SAVE: {
+                
+            }*/
         }
         default:
             result.message = "Action not recognized homeboy.\n";
             break;
-    } // This MUST close the switch
+    } // SWITCH CASE SISTA BRACKET DAFUQ
+
 
     return result; 
-} // This MUST be the final bracket in the file
+} //SISTA BRACKET DAFUQ

@@ -3,26 +3,8 @@
 #include <map>
 #include <vector>
 #include<items/item.h>
-//Rum, föremål och spelarens tillstånd
-/*struct Item {
-public:
-    std::string id;          //unikt id
-    std::string displayname; //namn i text
-    std::string commandName; //enstaka namn
-    std::string description; //Beskrivning
-    virtual ~Item() = default;
-};
+//Rum och spelarens tillstånd
 
-struct KeyItem : public Item {
-public:
-    std::string unlocksRoomId;
-};
-
-struct ReadableItem : public Item {
-public:
-    std::string text; //texten som utläses
-};
-*/
 
 struct Room {
 public:

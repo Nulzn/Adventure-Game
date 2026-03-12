@@ -22,6 +22,10 @@ GameState WorldLoader::load(const std::string& filename) {
         state.rooms[room.id] = room;
     }
 
+    for (const auto& inventoryJson : j["inventory"]) {
+        parseInventory(state, inventoryJson);
+    }
+
     validate(state);
     return state;
 }
@@ -112,6 +116,14 @@ Room WorldLoader::parseRoom(const nlohmann::json& roomJson) {
     }
 
     return room;
+}
+
+void WorldLoader::parseInventory(GameState& state, const nlohmann::json& inventoryJson) {
+    for (const auto& itemJson : inventoryJson) {
+        auto item = parseItem(itemJson);
+        state.inventory.push_back(item);
+        //state.inventory[item->id] = item;
+    }
 }
 
 void WorldLoader::validate(const GameState& state) {

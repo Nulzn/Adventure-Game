@@ -1,0 +1,17 @@
+==== GAME Diagnostics ====
+
+
+--- SYSTEM DIAGNOSTIC ---
+Starting Room ID: 'kitchen'
+Total Rooms Loaded: 9
+ - Loaded Room: 'bathroom'
+ - Loaded Room: 'bedroom'
+ - Loaded Room: 'garage'
+ - Loaded Room: 'garden'
+ - Loaded Room: 'hall'
+ - Loaded Room: 'kitchen'
+ - Loaded Room: 'livingroom'
+ - Loaded Room: 'office'
+ - Loaded Room: 'warroom'
+-------------------------
+

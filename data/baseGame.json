@@ -96,7 +96,6 @@
           "description": "Old rusty tool",
           "type": "Item"
         }
-
       ],
       "exits": {
         "north": "garden",
